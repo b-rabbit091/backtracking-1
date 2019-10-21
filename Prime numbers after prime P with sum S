@@ -1,0 +1,151 @@
+
+/* Prime numbers after prime P with sum S
+
+Given three numbers sum sum_reuired, prime P and N, find all N prime numbers after prime P such that their sum is equal to S.
+
+Example:
+Input :  N = 2, P = 7, sum_required = 28 
+Output : 11 17
+Explanation : 11 and 17 are primes after
+prime 7 and (11 + 17 = 28) 
+
+
+Input :  N = 3, P = 2, sum_required = 23 
+Output : 3 7 13
+         5 7 11
+Explanation : 3, 5, 7, 11 and 13 are primes 
+after prime 2. And (3 + 7 + 13 = 5 + 7 + 11 
+= 23)
+
+
+Input :  N = 4, P = 3, sum_required = 54
+Output : 5 7 11 31 
+         5 7 13 29 
+         5 7 19 23 
+         5 13 17 19 
+         7 11 13 23 
+         7 11 17 19 
+Explanation : All are prime numbers and 
+their sum is 54
+
+*/
+
+
+
+import java.util.*;
+public class pands
+{
+	//For primes------------------------------------------------------------------------------------------------
+	static int[]  soe (int f, int l,int s, boolean[] ps)
+	{
+
+		for(int i=0;i<ps.length;i++)
+		{
+			ps[i]=true;
+		}
+		
+		
+		int c=0;
+		for(int i=2;i<ps.length;i++)
+		{
+			if(ps[i]==true)
+			{
+				++c;
+				for(int j=2;i*j<s;j++)
+				{
+				ps[i*j]=false;
+
+				}
+
+			}
+
+		}
+
+		ps[0]=false;
+		ps[1]=false;
+
+
+		for(int i=0;i<=l;i++)
+		{
+			if(ps[i]==true)
+				c--;
+			ps[i]=false;
+		}
+
+		
+
+		int [] primes =new int[c];
+		int k=0;
+		for(int i=l+1;i<ps.length;i++)
+			{if(ps[i]==true)
+				{primes[k]=i;
+					k++;}
+			}
+		return primes;
+	}
+
+//---------------------------------------------------------------------------------------------------------
+
+static boolean issafe(int curr_sum,int count,int length,int sum_required)
+{
+	
+	if(count>=length || curr_sum!=sum_required && count==length-1)
+		return false;
+	return true;
+
+}
+ static boolean sum_solve(int index, int count, int curr_sum,int[] primes,int[]result_array,int sum_required)
+ {
+ 	
+ 	if(count==result_array.length && curr_sum==sum_required)
+ 		{	 			System.out.println();
+
+ 			for(int i=0;i<result_array.length;i++)
+ 			System.out.print(result_array[i]+ " ");
+ 			System.out.println();
+ 			return false;}
+ 	
+
+ 	else
+ 	{
+	for(int i=index; i<primes.length;i++)
+ 		{
+		if(issafe(curr_sum+primes[i], count,result_array.length,sum_required))
+ 			{
+ 				curr_sum=curr_sum+primes[i];
+ 				
+ 				result_array[count]=primes[i];
+
+ 				if(sum_solve(i+1,count+1,curr_sum,primes,result_array,sum_required))
+ 					return true;
+
+ 				result_array[count]=0;
+ 				curr_sum=curr_sum-primes[i];
+			}
+
+		else
+
+ 			sum_solve(i+2,count+1,curr_sum,primes,result_array,sum_required);
+ 			//System.out.println(result_array[0]+"     "+i);
+ 		
+ 		}
+ 		
+ 		
+ 	}
+ 	return false;
+ } 
+
+	public static void main(String[] z)
+	{
+		int sum_required = 54;
+		int n=4;
+		int p=3;
+		boolean[] pns =new boolean[sum_required];
+		//for prime--------------------------------------------------------------------------
+		int[] primes = soe(n,p,sum_required,pns);
+		//for sum-------------------------------------------------------------------
+		int[] an =new int[n];
+		sum_solve(0,0,0,primes,an,sum_required);
+
+	}
+}
