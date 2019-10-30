@@ -1,0 +1,118 @@
+/*
+Input : { {2, 1, 0, 0},
+         {3, 0, 0, 1},
+         {0, 1, 0, 1},
+          {0, 0, 0, 1}
+        }
+Output : { {1, 0, 0, 0},
+           {1, 0, 0, 1},
+           {0, 0, 0, 1},
+           {0, 0, 0, 1}
+         }
+
+Explanation 
+Rat started with M[0][0] and can jump upto 2 steps right/down. 
+Let's try in horizontal direction - 
+M[0][1] won't lead to solution and M[0][2] is 0 which is dead end. 
+So, backtrack and try in down direction. 
+Rat jump down to M[1][0] which eventually leads to solution.  
+
+Input : { 
+      {2, 1, 0, 0},
+      {2, 0, 0, 1},
+      {0, 1, 0, 1},
+      {0, 0, 0, 1}
+    }
+Output : Solution doesn't exist
+
+*/
+
+
+public class rat_maze
+{
+	static boolean issave(int[][]maze, int r,int j, int[][]sol)
+
+	{
+		return(r>=0 && r<maze.length && j>=0 && j<maze.length && maze[r][j]!=0 && sol[r][j]!=1 );
+	}
+	static boolean solve(int[][]maze,int row,int col,int[][]sol)
+	{
+		if(row ==maze.length-1&& col==maze.length-1)
+		{	
+			if(maze[row][col]!=0){
+				sol[row][col]=1;
+
+
+		print_result(sol);
+			
+
+			
+			return true;}
+      
+      return false;
+		}
+
+		else
+		{
+			
+			if(issave(maze,row,col,sol))
+			{
+				int k=maze[row][col];
+
+				sol[row][col]=1;
+
+				for(int i=1;i<=k;i++)
+				{
+					if(solve(maze,row+i,col,sol))
+						return true;
+
+					if(solve(maze,row,col+i,sol))
+						return true;
+				} 
+				sol[row][col]=0;
+
+
+			}
+		}
+		/*
+*/
+		return false;
+}
+
+	static void print_result(int [][]sol)
+	{
+		for(int i=0;i<sol.length;i++)
+		{
+			for(int j=0;j<sol.length;j++)
+			{
+				System.out.print(sol[i][j]);
+			}
+			System.out.println();
+		}
+	}
+	
+
+	public static void main(String [] z)
+	{
+		int maze[][] ={{2, 1, 0, 0},
+      {2, 0, 0, 1},
+      {0, 1, 0, 1},
+      {0, 0, 0, 1}};
+
+		int maze1[][]={ { 2, 2, 1, 1, 0 }, 
+                        { 0, 0, 3, 0, 0 },  
+                        { 1, 0, 0, 0, 0 },  
+                        { 0, 0, 2, 0, 1 }, 
+                        { 0, 0, 3, 0, 1 } };
+        int sol[][]=new int[maze.length][maze.length];
+
+
+        if(!solve(maze,0,0,sol))
+        	System.out.println("Solution doesnot exist");
+        	
+        sol=new int[maze1.length][maze1.length];
+
+        if(!solve(maze1,0,0,sol))
+        	System.out.println("Solution doesnot exist");
+        	}
+}
